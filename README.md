@@ -177,16 +177,27 @@ Example: Log("Task Added", "Task: 'Enable 2FA'", "Task")
 #### When User Types "show log":
 
 ========== ACTIVITY LOG ==========
+
 [14:32:15] System: Application started
+
 Details: CyberAwareness bot launched
+
 [14:32:45] Login: User Logged In
+
 Details: User: NTOKOZO
+
 [14:33:10] User: User Input
+
 Details: Message: 'Tell me about password'
+
 [14:34:20] Task: Task Added (NLP)
+
 Details: Task: 'Update password'
+
 [14:35:00] Quiz: Quiz Started
+
 [14:36:00] Quiz: Quiz Completed
+
 Details: Score: 7 out of 10
 
 Showing last 6 actions.
