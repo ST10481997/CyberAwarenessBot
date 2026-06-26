@@ -53,10 +53,10 @@ Part 3 transforms the chatbot from a simple Q&A bot into a full-featured cyberse
 #### Part 2:
 hatbot Responses:	Yes
 Topic Detection: Yes
-Sentiment Detection:	✅ Yes
-Quick Topics:	✅ Yes
-Voice Output:	✅ Yes
-Memory Storage:	✅ Yes (Text file)
+Sentiment Detection:	Yes
+Quick Topics:	Yes
+Voice Output:	 Yes
+Memory Storage: Yes (Text file)
 Task Management: No	
 Quiz Game: No	
 NLP Simulation: No
@@ -141,301 +141,90 @@ extractDate(message)
 ntent Patterns:
 
 Intent	Keywords
-add_task	"add task", "create task", "new task"
-set_reminder	"remind me", "set reminder", "remind in"
-show_tasks	"show tasks", "view tasks", "my tasks"
-complete_task	"complete task", "mark done", "finish task"
-delete_task	"delete task", "remove task", "clear task"
-start_quiz	"start quiz", "quiz me", "take quiz"
-show_log	"show log", "activity log", "what have you done"
-help	"help", "what can you do", "options"
-3. ActivityLogger.cs - Activity Tracking
+- add_task:	"add task", "create task", "new task"
+- set_reminder	"remind me", "set reminder", "remind in"
+- show_tasks	"show tasks", "view tasks", "my tasks"
+- complete_task	"complete task", "mark done", "finish task"
+- delete_task	"delete task", "remove task", "clear task"
+- start_quiz	"start quiz", "quiz me", "take quiz"
+- show_log	"show log", "activity log", "what have you done"
+- help	"help", "what can you do", "options"
+
+### 3. ActivityLogger.cs - Activity Tracking
 Purpose: Records all significant actions for user review.
+ActivityLogger.Log(action, details, category)
 
-How It Works:
+Example: Log("Task Added", "Task: 'Enable 2FA'", "Task")
 
-text
-┌─────────────────────────────────────────────────────────┐
-│           ActivityLogger.Log(action, details, category) │
-│                                                         │
-│  Example: Log("Task Added", "Task: 'Enable 2FA'", "Task")│
-│                                                         │
-│  1. Create ActivityEntry with:                          │
-│     - Timestamp: DateTime.Now                          │
-│     - Action: "Task Added"                             │
-│     - Details: "Task: 'Enable 2FA'"                    │
-│     - Category: "Task"                                 │
-│     - Id: Auto-incremented                             │
-│                                                         │
-│  2. Add to activities list                             │
-│                                                         │
-│  3. If list > 60 entries, remove oldest                │
-│                                                         │
-│  4. Raise ActivityLogged event                         │
-└─────────────────────────────────────────────────────────┘
-Activity Categories:
+1. Create ActivityEntry with:
 
-Category	Used For
-System	Application start, system events
-Login	User login events
-User	User messages and inputs
-Task	Task operations (add, complete, delete)
-Quiz	Quiz activities (start, answer, complete)
-NLP	NLP detection and processing
-Error	Error occurrences
-General	General actions like help requests
-When User Types "show log":
+- Timestamp: DateTime.Now
 
-text
-┌─────────────────────────────────────────────────────────┐
-│           ActivityLogger.GetFormattedSummary()          │
-│                                                         │
-│  Output:                                                │
-│  ========== ACTIVITY LOG ==========                     │
-│  [14:32:15] System: Application started                 │
-│    Details: CyberAwareness bot launched                 │
-│  [14:32:45] Login: User Logged In                      │
-│    Details: User: NTOKOZO                               │
-│  [14:33:10] User: User Input                           │
-│    Details: Message: 'Tell me about password'           │
-│  [14:34:20] Task: Task Added (NLP)                     │
-│    Details: Task: 'Update password'                    │
-│  [14:35:00] Quiz: Quiz Started                         │
-│  [14:36:00] Quiz: Quiz Completed                       │
-│    Details: Score: 7 out of 10                         │
-│                                                         │
-│  Showing last 6 actions.                                │
-│  Total activities: 6                                    │
-└─────────────────────────────────────────────────────────┘
-4. TasksRepository.cs - Database Operations
+- Action: "Task Added"
+
+- Details: "Task: 'Enable 2FA'"
+
+- Category: "Task"
+
+- Id: Auto-incremented
+
+2. Add to activities list
+
+3. If list > 60 entries, remove oldest
+
+4. Raise ActivityLogged event
+
+#### When User Types "show log":
+
+========== ACTIVITY LOG ==========
+[14:32:15] System: Application started
+Details: CyberAwareness bot launched
+[14:32:45] Login: User Logged In
+Details: User: NTOKOZO
+[14:33:10] User: User Input
+Details: Message: 'Tell me about password'
+[14:34:20] Task: Task Added (NLP)
+Details: Task: 'Update password'
+[14:35:00] Quiz: Quiz Started
+[14:36:00] Quiz: Quiz Completed
+Details: Score: 7 out of 10
+
+Showing last 6 actions.
+Total activities: 6
+
+### 3. TaskRepository.cs - Database Operations
 Purpose: Manages tasks in the SQL database.
 
-How It Works:
+Database Schema:
 
-text
-┌─────────────────────────────────────────────────────────┐
-│                  Database Schema                        │
-│                                                         │
-│  Table: userTasks                                       │
-│  ┌─────────────────────────────────────────────────────┐│
-│  │ taskid      INT (IDENTITY) PRIMARY KEY             ││
-│  │ taskTitle   NVARCHAR                              ││
-│  │ taskDescription NVARCHAR                          ││
-│  │ taskReminderDate DATETIME (NULLABLE)              ││
-│  │ isCompleted  BIT (0 = Pending, 1 = Completed)     ││
-│  └─────────────────────────────────────────────────────┘│
-└─────────────────────────────────────────────────────────┘
+Table: userTasks
+taskid INT (IDENTITY) PRIMARY KEY
+taskTitle NVARCHAR
+taskDescription NVARCHAR 
+taskReminderDate DATETIME (NULLABLE) 
+isCompleted BIT (0 = Pending, 1 = Completed
 
-┌─────────────────────────────────────────────────────────┐
-│                    CRUD Operations                      │
-│                                                         │
-│  AddTask()                                              │
-│  ┌─────────────────────────────────────────────────────┐│
-│  │ INSERT INTO userTasks(taskTitle, taskDescription,  ││
-│  │ taskReminderDate, isCompleted)                     ││
-│  │ VALUES (@title, @description, @reminderDate, 0)    ││
-│  └─────────────────────────────────────────────────────┘│
-│                                                         │
-│  GetAllTasks()                                          │
-│  ┌─────────────────────────────────────────────────────┐│
-│  │ SELECT * FROM userTasks                            ││
-│  │ ORDER BY isCompleted ASC, taskReminderDate ASC    ││
-│  └─────────────────────────────────────────────────────┘│
-│                                                         │
-│  MarkTaskCompleted()                                    │
-│  ┌─────────────────────────────────────────────────────┐│
-│  │ UPDATE userTasks SET isCompleted = 1               ││
-│  │ WHERE taskid = @taskId                            ││
-│  └─────────────────────────────────────────────────────┘│
-│                                                         │
-│  DeleteTask()                                           │
-│  ┌─────────────────────────────────────────────────────┐│
-│  │ DELETE FROM userTasks WHERE taskid = @taskId      ││
-│  └─────────────────────────────────────────────────────┘│
-└─────────────────────────────────────────────────────────┘
-🔄 Data Flow: User Interaction Example
-Example: Adding a Task
-text
-User Types: "add task, Enable 2FA, Set up two-factor authentication, 25/06/2026"
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                        send_question()                              │
-│                                                                     │
-│  1. Display user message: "NTOKOZO: add task..."                   │
-│  2. Clear question box                                             │
-│  3. Check for "interested in" → No                                 │
-│  4. NLP Detection: detectIntention() → "add_task"                  │
-│  5. Switch to "add_task" case                                     │
-│  6. Call AddTaskWithNLP(message)                                  │
-└─────────────────────────────────────────────────────────────────────┘
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                      AddTaskWithNLP()                               │
-│                                                                     │
-│  1. Extract task text: "Enable 2FA, Set up..."                     │
-│  2. Extract date: "25/06/2026" → DateTime(2026, 6, 25)            │
-│  3. Split into title and description                               │
-│     Title: "Enable 2FA"                                            │
-│     Description: "Set up two-factor authentication"                │
-│  4. repo.AddTask(title, description, reminderDate)                │
-│  5. activityLogger.Log("Task Added (NLP)", ...)                    │
-│  6. Display success message in chat                                │
-└─────────────────────────────────────────────────────────────────────┘
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                       TasksRepository.AddTask()                     │
-│                                                                     │
-│  1. Connect to SQL database (CyberBot)                             │
-│  2. Execute INSERT command                                         │
-│  3. Save task with isCompleted = 0 (pending)                       │
-└─────────────────────────────────────────────────────────────────────┘
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                         Chat Output                                 │
-│                                                                     │
-│  HAPPYCODER: Task added successfully!                              │
-│     Title: Enable 2FA                                              │
-│     Description: Set up two-factor authentication                  │
-│     Reminder: 25/06/2026                                           │
-└─────────────────────────────────────────────────────────────────────┘
-Example: Starting the Quiz
-text
-User Types: "start quiz"
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                        send_question()                              │
-│                                                                     │
-│  1. NLP Detection: detectIntention() → "start_quiz"                │
-│  2. Switch to "start_quiz" case                                    │
-│  3. Call StartQuiz()                                               │
-└─────────────────────────────────────────────────────────────────────┘
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                         StartQuiz()                                 │
-│                                                                     │
-│  1. quizGame.startQuiz()                                           │
-│  2. Shuffles questions                                             │
-│  3. Fires QuestionDisplayed event                                  │
-│  4. activityLogger.Log("Quiz Started", ...)                        │
-└─────────────────────────────────────────────────────────────────────┘
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                 QuizGame.startQuiz()                                │
-│                                                                     │
-│  1. questions.OrderBy(q => random.Next()).ToList()  // Shuffle    │
-│  2. currentQuestion = 0                                            │
-│  3. score = 0                                                      │
-│  4. isActive = true                                               │
-│  5. OnQuestionDisplayed(Question 1)                                │
-└─────────────────────────────────────────────────────────────────────┘
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│              QuizGame_QuestionDisplayed (Event Handler)             │
-│                                                                     │
-│  Display in chat:                                                  │
-│  "Question 1 of 15:"                                               │
-│  "What is the best way to create a strong password?"               │
-│  "  1. Use your birthday and name"                                 │
-│  "  2. Use a password manager..."                                  │
-│  "  3. Use the same password..."                                   │
-│  "  4. Use 'password123'"                                          │
-│  "Type your answer here (number): "                                │
-└─────────────────────────────────────────────────────────────────────┘
-                    │
-                    ▼
-User Types: "2"
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                    send_question() (Quiz Active)                   │
-│                                                                     │
-│  1. quizGame.IsActive = true → Enter quiz block                    │
-│  2. Parse answer: 2 → int.TryParse()                               │
-│  3. quizGame.processAnswer(1) // 0-based index                     │
-└─────────────────────────────────────────────────────────────────────┘
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                QuizGame.processAnswer()                             │
-│                                                                     │
-│  1. Check: selectedIndex == question.CorrectAnswer                 │
-│  2. If correct: score++                                            │
-│  3. Create QuizResult with feedback                                │
-│  4. currentQuestion++                                              │
-│  5. If more questions: OnQuestionDisplayed(next)                   │
-│  6. If complete: OnQuizCompleted()                                 │
-└─────────────────────────────────────────────────────────────────────┘
-                    │
-                    ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│              QuizGame_QuizCompleted (Event Handler)                 │
-│                                                                     │
-│  Display in chat:                                                  │
-│  "================QUIZ COMPLETE================"                   │
-│  "Your overall score: 8 out of 15"                                 │
-│  "Score: 53% - Keep Learning!..."                                  │
-└─────────────────────────────────────────────────────────────────────┘
-🔄 The Message Flow Process
-Here's the complete flow when a user sends a message:
+CRUD Operations:
 
-text
-User Input
-    │
-    ▼
-┌───────────────────────────────────────────────────────────────────┐
-│                    send_question()                                │
-│                                                                   │
-│  1. Get message from question_box                                 │
-│  2. If empty: Show error message                                 │
-│  3. Display: "{name}: {message}"                                 │
-│  4. Clear question_box                                           │
-│                                                                   │
-│  5. Check for "interested in" → SaveToFile()                     │
-│                                                                   │
-│  6. NLP Intent Detection:                                        │
-│     intent = nlpSimulator.detectIntention(message)               │
-│                                                                   │
-│  7. Log User Input:                                              │
-│     activityLogger.Log("User Input", message, "User")            │
-│                                                                   │
-│  8. Switch on Intent:                                            │
-│     ┌──────────────────────────────────────────────────────────┐  │
-│     │ "add_task"       → AddTaskWithNLP()                     │  │
-│     │ "show_tasks"     → ShowAllTasks()                       │  │
-│     │ "complete_task"  → CompleteTask()                       │  │
-│     │ "delete_task"    → DeleteTask()                         │  │
-│     │ "start_quiz"     → StartQuiz()                          │  │
-│     │ "show_log"       → ShowActivityLog()                    │  │
-│     │ "help"           → ShowHelp()                           │  │
-│     │ "greeting"       → Display greeting                     │  │
-│     │ "how_are_you"    → Display response                     │  │
-│     │ "what_is_name"   → Display name response                │  │
-│     │ default          → Continue to next step                │  │
-│     └──────────────────────────────────────────────────────────┘  │
-│                                                                   │
-│  9. Check if Quiz is Active:                                      │
-│     if (quizGame.IsActive) → Process Quiz Answer                │
-│                                                                   │
-│  10. Check for "add task" format (backward compatibility)        │
-│                                                                   │
-│  11. Get Bot Response:                                            │
-│      botResponse = chatbotResponse(message)                      │
-│                                                                   │
-│  12. Display Response:                                            │
-│      chats_box.AppendText($"HAPPYCODER: {botResponse}")          │
-│                                                                   │
-│  13. Voice Output (if enabled)                                   │
-│                                                                   │
-│  14. Scroll to end                                                │
-└───────────────────────────────────────────────────────────────────┘
+AddTask()
+INSERT INTO userTasks(taskTitle, taskDescription, taskReminderDate, isCompleted)
+VALUES (@title, @description, @reminderDate, 0)
+
+GetAllTasks()
+SELECT * FROM userTasks
+ORDER BY isCompleted ASC, taskReminderDate ASC
+
+MarkTaskCompleted()
+UPDATE userTasks SET isCompleted = 1
+WHERE taskid = @taskId
+
+DeleteTask()
+DELETE FROM userTasks WHERE taskid = @taskId
+
+
+
+
+
 ## Summary of Improvements
 From Part 2 → Part 3
 Aspect: 
