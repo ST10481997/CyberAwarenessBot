@@ -49,16 +49,69 @@ Part 3 transforms the chatbot from a simple Q&A bot into a full-featured cyberse
 
 
 ## Feature Comparison: Part 2 vs Part 3
-Feature:	Part 2	Part 3
-Chatbot Responses:	✅ Yes	✅ Yes (Enhanced)
-Topic Detection:	✅ Yes	✅ Yes (Enhanced)
-Sentiment Detection:	✅ Yes	✅ Yes
-Quick Topics:	✅ Yes	✅ Yes
-Voice Output:	✅ Yes	✅ Yes
-Memory Storage:	✅ Yes (Text file)	✅ Yes (Text file)
-Task Management:	❌ No	✅ Yes (Database)
-Quiz Game:	❌ No	✅ Yes
-NLP Simulation:	❌ No	✅ Yes
-Activity Logging:	❌ No	✅ Yes
-Database Integration:	❌ No	✅ Yes (SQL)
-Task Reminders:	❌ No	✅ Yes
+### Feature:	
+#### Part 2:
+hatbot Responses:	Yes
+Topic Detection: Yes
+Sentiment Detection:	✅ Yes
+Quick Topics:	✅ Yes
+Voice Output:	✅ Yes
+Memory Storage:	✅ Yes (Text file)
+Task Management: No	
+Quiz Game: No	
+NLP Simulation: No
+Activity Logging:	No	
+Database Integration:	No
+Task Reminders:	No
+#### Part 3:
+Chatbot Responses: Yes (Enhanced)
+Topic Detection: Yes (Enhanced)
+Sentiment Detection: Yes
+Quick Topics: Yes
+Voice Output:	 Yes
+Memory Storage: Yes (Text file)
+Task Management: Yes (Database)
+Quiz Game: Yes
+NLP Simulation: Yes
+Activity Logging: Yes
+Database Integration:Yes (SQL)
+Task Reminders: Yes
+
+## How Each Component Works
+1. QuizGame.cs - Interactive Quiz System
+Purpose: Tests users' cybersecurity knowledge through an interactive quiz.
+
+How It Works:
+
+text
+User: "start quiz"
+         │
+         ▼
+┌─────────────────────────────────────────┐
+│  1. Initialize Questions (15 questions) │
+│     - Multiple Choice                   │
+│     - True/False                        │
+│                                         │
+│  2. Shuffle Questions Randomly          │
+│                                         │
+│  3. Display First Question              │
+│     "Question 1 of 15: What is...?"    │
+│                                         │
+│  4. User Answers (type 1, 2, 3, or 4)  │
+│         │                               │
+│         ▼                               │
+│  5. Check Answer                        │
+│     - If Correct: Score++               │
+│     - Show Feedback                     │
+│                                         │
+│  6. Next Question (repeat until done)   │
+│                                         │
+│  7. Show Final Score                    │
+│     "8/15 - 53% - Keep Learning!"      │
+└─────────────────────────────────────────┘
+Key Methods:
+
+csharp
+startQuiz()         // Begins the quiz
+processAnswer()     // Checks answer and updates score
+GetSummary()        // Returns final score with feedback
