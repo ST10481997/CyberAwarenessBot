@@ -46,3 +46,19 @@ Part 3 transforms the chatbot from a simple Q&A bot into a full-featured cyberse
 * View Log: Users can type "show log" to view recent activities
 
 * Statistics: Tracks activity counts by category
+
+
+## Feature Comparison: Part 2 vs Part 3
+Feature:	Part 2	Part 3
+Chatbot Responses:	✅ Yes	✅ Yes (Enhanced)
+Topic Detection:	✅ Yes	✅ Yes (Enhanced)
+Sentiment Detection:	✅ Yes	✅ Yes
+Quick Topics:	✅ Yes	✅ Yes
+Voice Output:	✅ Yes	✅ Yes
+Memory Storage:	✅ Yes (Text file)	✅ Yes (Text file)
+Task Management:	❌ No	✅ Yes (Database)
+Quiz Game:	❌ No	✅ Yes
+NLP Simulation:	❌ No	✅ Yes
+Activity Logging:	❌ No	✅ Yes
+Database Integration:	❌ No	✅ Yes (SQL)
+Task Reminders:	❌ No	✅ Yes
