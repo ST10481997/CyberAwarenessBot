@@ -209,32 +209,155 @@ Purpose: Manages tasks in the SQL database.
 Database Schema:
 
 Table: userTasks
+
 taskid INT (IDENTITY) PRIMARY KEY
+
 taskTitle NVARCHAR
+
 taskDescription NVARCHAR 
+
 taskReminderDate DATETIME (NULLABLE) 
+
 isCompleted BIT (0 = Pending, 1 = Completed
 
 CRUD Operations:
 
 AddTask()
+
 INSERT INTO userTasks(taskTitle, taskDescription, taskReminderDate, isCompleted)
+
 VALUES (@title, @description, @reminderDate, 0)
 
 GetAllTasks()
+
 SELECT * FROM userTasks
+
 ORDER BY isCompleted ASC, taskReminderDate ASC
 
 MarkTaskCompleted()
+
 UPDATE userTasks SET isCompleted = 1
+
 WHERE taskid = @taskId
 
 DeleteTask()
+
 DELETE FROM userTasks WHERE taskid = @taskId
 
+### Data Flow: User Interaction Example
+Example: Adding a Task
+
+User Types: "add task, Enable 2FA, Set up two-factor authentication, 25/06/2026"
+
+send_question()
+
+Display user message: "NTOKOZO: add task..."
+
+Clear question box
+
+Check for "interested in" → No
+
+NLP Detection: detectIntention() → "add_task"
+
+Switch to "add_task" case
+
+Call AddTaskWithNLP(message)
 
 
+AddTaskWithNLP()
 
+Extract task text: "Enable 2FA, Set up..."
+
+Extract date: "25/06/2026" → DateTime(2026, 6, 25)
+
+Split into title and description
+
+
+Title: "Enable 2FA"
+
+Description: "Set up two-factor authentication"
+
+repo.AddTask(title, description, reminderDate)
+
+activityLogger.Log("Task Added (NLP)", ...)
+
+Display success message in chat
+│
+▼
+TasksRepository.AddTask()
+
+Connect to SQL database (CyberBot)
+
+Execute INSERT command
+
+Save task with isCompleted = 0 (pending)
+│
+▼
+Chat Output
+
+
+HAPPYCODER: Task added successfully!
+
+Title: Enable 2FA
+
+Description: Set up two-factor authentication
+
+Reminder: 25/06/2026
+
+### The Message Flow Process
+Here's the complete flow when a user sends a message:
+
+User Input
+│
+▼
+send_question()
+
+Get message from question_box
+
+If empty: Show error message
+
+Display: "{name}: {message}"
+
+Clear question_box
+
+Check for "interested in" → SaveToFile()
+
+NLP Intent Detection:
+intent = nlpSimulator.detectIntention(message)
+
+Log User Input:
+activityLogger.Log("User Input", message, "User")
+
+Switch on Intent:
+- "add_task" → AddTaskWithNLP()
+- "show_tasks" → ShowAllTasks()
+- "complete_task" → CompleteTask()
+- "delete_task" → DeleteTask()
+- "start_quiz" → StartQuiz()
+- "show_log" → ShowActivityLog()
+- "help" → ShowHelp()
+- "greeting" → Display greeting
+- "how_are_you" → Display response
+- "what_is_name" → Display name response
+- default → Continue to next step
+
+Check if Quiz is Active:
+
+if (quizGame.IsActive) → Process Quiz Answer
+
+Check for "add task" format (backward compatibility)
+
+Get Bot Response:
+
+botResponse = chatbotResponse(message)
+
+Display Response:
+
+chats_box.AppendText($"HAPPYCODER: {botResponse}")
+
+Voice Output (if enabled)
+
+Scroll to end
 
 ## Summary of Improvements
 From Part 2 → Part 3
