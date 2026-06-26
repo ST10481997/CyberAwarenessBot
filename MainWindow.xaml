@@ -1,0 +1,814 @@
+﻿<Window x:Class="CyberAwarenessBot.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CyberAwarenessBot"
+        mc:Ignorable="d"
+        Title="HAPPYCODER BOT" Height="780" Width="850">
+
+    <Window.Resources>
+        <Style x:Key="GlowCyan" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#00E5FF"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#00E5FF" BlurRadius="14" ShadowDepth="0" Opacity="0.85"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="GlowGreen" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#39FF14"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#39FF14" BlurRadius="10" ShadowDepth="0" Opacity="0.75"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CyberTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="#0D1117"/>
+            <Setter Property="Foreground" Value="#00E5FF"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="BorderBrush" Value="#30363D"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CaretBrush" Value="#00E5FF"/>
+            <Setter Property="Padding" Value="8,10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                          Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CyberButton" TargetType="Button">
+            <Setter Property="Background" Value="#161B22"/>
+            <Setter Property="Foreground" Value="#00E5FF"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderBrush" Value="#30363D"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1F2937"/>
+                    <Setter Property="BorderBrush" Value="#00E5FF"/>
+                    <Setter Property="Foreground" Value="#FFFFFF"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#0D1117"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
+
+
+    <Grid><!--start of parent grid-->
+
+        <!-- Drop shadow around entire window -->
+        <!-- Outer border: provides rounded corners, background, and a visible border line -->
+        <Border
+            x:Name="loginborder"
+            CornerRadius="12" 
+            Background="#0D1117"
+            BorderBrush="#30363D" 
+            BorderThickness="1">
+
+            <!-- Visual effect: soft black drop shadow behind the border -->
+            <Border.Effect>
+
+                <DropShadowEffect 
+                    Color="#000000" 
+                    BlurRadius="30" 
+                    ShadowDepth="0" 
+                    Opacity="0.7"/>
+
+            </Border.Effect>
+
+            <!-- Main layout grid: splits into title bar row and content row -->
+
+            <Grid 
+                x:Name="layout_grid"
+                Visibility="Visible"
+                >
+
+                <Grid.RowDefinitions>
+                    <!--fixed height 44px for custom title bar-->
+                    <RowDefinition Height="44"/>
+                    <!-- title bar - star means taking all the remaining space for main content -->
+                    <RowDefinition Height="*"/>
+                    <!-- content -->
+                </Grid.RowDefinitions>
+
+                <!-- ── Custom title bar ── -->
+                <Border 
+                    Grid.Row="0" 
+                    CornerRadius="12,12,0,0"
+                    Background="#161B22"
+                    MouseLeftButtonDown="TitleBar_MouseDown">
+                    <!-- Event: allows dragging the window -->
+
+                    <Grid 
+                        x:Name="titlebar_grid"
+                        Visibility="Visible"                       
+                        >
+
+                        <TextBlock 
+                           Text="HAPPYCODER  *  Cybersecurity Awareness Bot"
+                           Foreground="#8B949E" 
+                           FontFamily="Consolas" 
+                           FontSize="11"
+                           VerticalAlignment="Center" 
+                           Margin="16,0,0,0"/>
+
+                        <!--close buttom-->
+                        <Button 
+                            
+                            Content="✕" 
+                            Click="CloseBtn_Click"
+                            HorizontalAlignment="Right" 
+                            Margin="0,0,8,0"
+                            Width="28" Height="28"
+                            Background="Transparent" 
+                            Foreground="#8B949E"
+                            BorderThickness="0" 
+                            FontSize="14" 
+                            Cursor="Hand"
+                            VerticalAlignment="Center"/>
+
+                    </Grid>
+                    <!--end of titlebar grid-->
+
+                </Border>
+
+
+                <!--start of main content area-->
+                <Grid 
+                    x:Name="logo_grid"
+                    Visibility="Visible"
+                    Grid.Row="1">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+
+                    <!--ASCII Logo-->
+
+                    <Border 
+                        Grid.IsSharedSizeScope="True"
+                        Background="#0D1117"
+                        BorderBrush="Aqua"
+                        BorderThickness="0,0,0,1"
+                        Padding="10,14,10,10">
+
+                        <TextBlock
+                            
+                            Style="{StaticResource GlowCyan}"
+                            FontSize="10"
+                            FontWeight="Bold"
+                            HorizontalAlignment="Center"
+                            TextAlignment="Center"
+                            xml:space="preserve"
+                            >
+ /$$$$$$  /$$     /$$ /$$$$$$$  /$$$$$$$$ /$$$$$$$   /$$$$$$  /$$$$$$$$  /$$$$$$  /$$   /$$ /$$$$$$$  /$$$$$$ /$$$$$$$$ /$$     /$$
+/$$__  $$|  $$   /$$/| $$__  $$| $$_____/| $$__  $$ /$$__  $$| $$_____/ /$$__  $$| $$  | $$| $$__  $$|_  $$_/|__  $$__/|  $$   /$$/
+| $$  \__/ \  $$ /$$/ | $$  \ $$| $$      | $$  \ $$| $$  \__/| $$      | $$  \__/| $$  | $$| $$  \ $$  | $$     | $$    \  $$ /$$/
+| $$        \  $$$$/  | $$$$$$$ | $$$$$   | $$$$$$$/|  $$$$$$ | $$$$$   | $$      | $$  | $$| $$$$$$$/  | $$     | $$     \  $$$$/
+| $$         \  $$/   | $$__  $$| $$__/   | $$__  $$ \____  $$| $$__/   | $$      | $$  | $$| $$__  $$  | $$     | $$      \  $$/
+| $$    $$    | $$    | $$  \ $$| $$      | $$  \ $$ /$$  \ $$| $$      | $$    $$| $$  | $$| $$  \ $$  | $$     | $$       | $$
+|  $$$$$$/    | $$    | $$$$$$$/| $$$$$$$$| $$  | $$|  $$$$$$/| $$$$$$$$|  $$$$$$/|  $$$$$$/| $$  | $$ /$$$$$$   | $$       | $$
+ \______/     |__/    |_______/ |________/|__/  |__/ \______/ |________/ \______/  \______/ |__/  |__/|______/   |__/       |__/
+
+/$$$$$$  /$$      /$$  /$$$$$$  /$$$$$$$  /$$$$$$$$ /$$   /$$ /$$$$$$$$  /$$$$$$   /$$$$$$        /$$$$$$$   /$$$$$$  /$$$$$$$$ 
+/$$__  $$| $$  /$ | $$ /$$__  $$| $$__  $$| $$_____/| $$$ | $$| $$_____/ /$$__  $$ /$$__  $$      | $$__  $$ /$$__  $$|__  $$__/
+| $$  \ $$| $$ /$$$| $$| $$  \ $$| $$  \ $$| $$      | $$$$| $$| $$      | $$  \__/| $$  \__/      | $$  \ $$| $$  \ $$   | $$   
+| $$$$$$$$| $$/$$ $$ $$| $$$$$$$$| $$$$$$$/| $$$$$   | $$ $$ $$| $$$$$   |  $$$$$$ |  $$$$$$       | $$$$$$$ | $$  | $$   | $$   
+| $$__  $$| $$$$_  $$$$| $$__  $$| $$__  $$| $$__/   | $$  $$$$| $$__/    \____  $$ \____  $$      | $$__  $$| $$  | $$   | $$   
+| $$  | $$| $$$/ \  $$$| $$  | $$| $$  \ $$| $$      | $$\  $$$| $$       /$$  \ $$ /$$  \ $$      | $$  \ $$| $$  | $$   | $$   
+| $$  | $$| $$/   \  $$| $$  | $$| $$  | $$| $$$$$$$$| $$ \  $$| $$$$$$$$|  $$$$$$/|  $$$$$$/      | $$$$$$$/|  $$$$$$/   | $$   
+|__/  |__/|__/     \__/|__/  |__/|__/  |__/|________/|__/  \__/|________/ \______/  \______/       |_______/  \______/    |__/  
+
+                                              HAPPYCODER BOT  v2.0
+
+
+                        </TextBlock>
+                    </Border>
+
+                    <!-- Robot face + tagline -->
+                    <StackPanel
+                        x:Name="robotface_panel"
+                        Visibility="Visible"
+                        
+                        Grid.Row="1" 
+                        HorizontalAlignment="Center"
+                        Margin="0,14,0,0">
+
+                        <TextBlock 
+                            Style="{StaticResource GlowGreen}"
+                            FontSize="10" 
+                            TextAlignment="Center"
+                            xml:space="preserve">       
+   /        \
+   /__________\
+   |  _   _   |
+   | | | | |  |
+   | |_| |_|  |
+   |  _____   |
+   | |     |  |
+   | |_____|  |
+   |__________|
+Stay Safe * Stay Secure
+
+                        </TextBlock>
+
+                    </StackPanel>
+
+                    <!-- Login form -->
+                    <StackPanel 
+                        x:Name="loginform_panel"
+                        Visibility="Visible"
+                        Grid.Row="2" 
+                        Width="370"
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Center"
+                        Margin="0,2,0,25">
+
+
+                        <Rectangle 
+                            Height="1" 
+                            Fill="#30363D" 
+                            Margin="0,0,0,20"/>
+
+                        <TextBlock 
+                            Text="Welcome! Please enter your name to begin."
+                            Foreground="#8B949E" 
+                            FontFamily="Consolas" 
+                            FontSize="16"
+                            TextWrapping="Wrap" 
+                            TextAlignment="Center" 
+                            Margin="0,0,0,20"/>
+
+
+                        <TextBlock 
+                            
+                            Text="YOUR NAME" 
+                            Foreground="#00E5FF"
+                            FontFamily="Consolas" 
+                            FontSize="13" 
+                            FontWeight="Bold"
+                            Margin="0,0,0,6"/>
+
+                        <TextBox 
+                            x:Name="NameBox"
+                            Height="44"
+                            Foreground="DarkBlue"
+                            FontWeight="Bold"
+                             />
+
+                        <TextBlock 
+                            x:Name="ValidationMsg"
+                            Foreground="#FF4444" 
+                            FontFamily="Consolas" 
+                            FontSize="9"
+                            Margin="0,4,0,0" 
+                            Visibility="Collapsed" 
+                            TextWrapping="Wrap"/>
+
+                        <Rectangle 
+                            Height="1" 
+                            Fill="#30363D" 
+                            Margin="0,20,0,20"/>
+
+                        <Button
+                            Style="{StaticResource CyberButton}"
+                            Height="30"
+                            Width="250"
+                            Content="Enter Chat ->"
+                            Click="EnterButton_Click"/>
+
+                    </StackPanel>
+
+
+                </Grid>
+                <!--end of logo grid-->
+                <!--end of main content area-->
+            </Grid>
+            <!--end of layout grid-->
+
+
+        </Border>
+        <!--end of window border-->
+
+        <!--start of messaage window-->
+
+
+        <!-- Outer shadow container -->
+        <Border 
+            x:Name="chatborder"
+            Visibility="Collapsed"
+            CornerRadius="12" 
+            Background="#0D1117"
+            BorderBrush="#30363D" 
+            BorderThickness="1">
+
+            <Border.Effect>
+                <DropShadowEffect 
+                    Color="#000" 
+                    BlurRadius="30" 
+                    ShadowDepth="0" 
+                    Opacity="0.8"/>
+            </Border.Effect>
+
+            <Grid
+                x:Name="title_grid"
+                Visibility="Visible">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="44"/>
+                    <!-- title bar -->
+                    <RowDefinition Height="*"/>
+                    <!-- body -->
+                </Grid.RowDefinitions>
+
+                <!--Custom title bar-->
+                <Border 
+                    Grid.Row="0" 
+                    CornerRadius="12,12,0,0" 
+                    Background="#161B22"
+                    MouseLeftButtonDown="TitleBar_MouseDown">
+
+                    <Grid>
+
+                        <StackPanel 
+                    Orientation="Horizontal" 
+                    VerticalAlignment="Center" 
+                    Margin="14,0,0,0">
+
+                            <Ellipse 
+                        Width="10" 
+                        Height="10" 
+                        Fill="#39FF14" 
+                        Margin="0,0,6,0">
+
+                                <Ellipse.Effect>
+                                    <DropShadowEffect 
+                                Color="#39FF14" 
+                                BlurRadius="6" 
+                                ShadowDepth="0" 
+                                Opacity="0.9"/>
+                                </Ellipse.Effect>
+
+                            </Ellipse>
+
+                            <TextBlock 
+                        Text="HAPPYCODER  ·  Cybersecurity Awareness Bot  v2.0"
+                        Foreground="#8B949E" 
+                        FontFamily="Consolas" 
+                        FontSize="11"
+                        VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Window controls -->
+                        <StackPanel 
+                Orientation="Horizontal" 
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center" 
+                Margin="0,0,8,0">
+
+                            <Button 
+                                Content="─" 
+                                Click="minimise_button"                  
+                                Width="28" 
+                                Height="28" 
+                                Background="Transparent"
+                                Foreground="#8B949E" 
+                                BorderThickness="0"
+                                FontSize="14" 
+                                Cursor="Hand" 
+                                VerticalAlignment="Center"/>
+
+                            <Button 
+                    Content="✕" 
+                                Click="close_buttonclick"
+                    Width="28" 
+                    Height="28" 
+                    Background="Transparent"
+                    Foreground="#8B949E" 
+                    BorderThickness="0"
+                    FontSize="14" 
+                    Cursor="Hand" 
+                    VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                    </Grid>
+                </Border>
+
+
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="220"/>
+                        <!-- sidebar -->
+                        <ColumnDefinition Width="*"/>
+                        <!-- chat -->
+                    </Grid.ColumnDefinitions>
+
+
+
+                    <!-- SIDEBAR -->
+                    <Border 
+                Grid.Column="0" 
+                Background="#161B22"
+                BorderBrush="#30363D" 
+                BorderThickness="0,0,1,0"
+                CornerRadius="0,0,0,12">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Scrollable top area -->
+                            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+                                <StackPanel Margin="14,16,14,10">
+
+
+                                    <!-- ASCII robot -->
+                                    <TextBlock 
+                            FontFamily="Consolas" 
+                            FontSize="9"
+                            Foreground="#39FF14" 
+                            TextAlignment="Center"
+                            Margin="0,0,0,10"
+                            xml:space="preserve">
+                                        <TextBlock.Effect>
+                                            <DropShadowEffect 
+                                    Color="#39FF14" 
+                                    BlurRadius="8" 
+                                    ShadowDepth="0" 
+                                    Opacity="0.7"/>
+                                        </TextBlock.Effect>
+                            
+   /        \
+   /__________\
+   |  _   _   |
+   | | | | |  |
+   | |_| |_|  |
+   |  _____   |
+   | |     |  |
+   | |_____|  |
+   |__________|
+Stay Safe * Stay Secure
+
+                                    </TextBlock>
+
+                                    <TextBlock 
+                    Text="HAPPYCODER" 
+                    Foreground="#00E5FF"
+                    FontFamily="Consolas" 
+                    FontWeight="Bold"
+                    FontSize="14" 
+                    HorizontalAlignment="Center">
+                                        <TextBlock.Effect>
+                                            <DropShadowEffect Color="#00E5FF" BlurRadius="10" ShadowDepth="0" Opacity="0.7"/>
+                                        </TextBlock.Effect>
+                                    </TextBlock>
+
+                                    <TextBlock 
+                    Text="Cybersecurity Bot" 
+                    Foreground="#8B949E"
+                    FontFamily="Consolas" 
+                    FontSize="10"
+                    HorizontalAlignment="Center" 
+                    Margin="0,2,0,0"/>
+
+                                    <Rectangle Height="1" Fill="#30363D" Margin="0,12,0,12"/>
+
+                                    <!-- User info -->
+                                    <TextBlock 
+                    Text="LOGGED IN AS" 
+                    Foreground="#8B949E"
+                    FontFamily="Consolas" 
+                    FontSize="9" 
+                    Margin="0,0,0,4"/>
+                                    <TextBlock 
+                    x:Name="SidebarUserName"
+                    Foreground="#E6EDF3" 
+                    FontFamily="Consolas"
+                    FontSize="13" 
+                    FontWeight="Bold"/>
+
+                                    <Rectangle Height="1" Fill="#30363D" Margin="0,12,0,8"/>
+
+                                    <!-- Sentiment display -->
+                                    <TextBlock 
+                    Text="CURRENT MOOD" 
+                    Foreground="#8B949E"
+                    FontFamily="Consolas" 
+                    FontSize="9" 
+                    Margin="0,0,0,4"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Ellipse 
+                        x:Name="MoodDot" 
+                        Width="10" Height="10"
+                        Fill="#8B949E" 
+                        Margin="0,0,6,0" 
+                        VerticalAlignment="Center"/>
+                                        <TextBlock 
+                        x:Name="MoodLabel" 
+                        Text="Neutral"
+                        Foreground="#8B949E" 
+                        FontFamily="Consolas" 
+                        FontSize="11"/>
+                                    </StackPanel>
+
+                                    <Rectangle Height="1" Fill="#30363D" Margin="0,12,0,8"/>
+                                    
+                                    <!--===============Part 3: new feature buttons==============-->
+                                    <TextBlock 
+                                        Text="FEATURES"
+                                        Foreground="#39FF14"
+                                        FontFamily="Consolas"
+                                        FontWeight="Bold"
+                                        FontSize="10"
+                                        Margin="0,0,0,6"                                       
+                                        />
+                                    
+                                    <!--Quiz button-->
+                                    <Button 
+                                        
+                                        Content="START QUIZ"
+                                        Click="StartQuizButtton_Click"
+                                        />
+                                    
+                                    <!--show Tasks Button-->
+                                    <Button
+                                        Content="MY TASKS"
+                                        Click="ShowTaskButton_Click"
+                                        />
+                                    
+                                    <!--Activity Log Button-->
+                                    <Button
+                                        Content="ACTIVITY LOG"
+                                        Click="ShowLogButton_Click"
+                                        />
+                                    
+                                    <!--Help Button-->
+                                    <Button
+                                        
+                                        Content="HELP"
+                                        Click="HelpButton_Click"
+                                        />
+
+
+
+                                    <TextBlock 
+                    Text="QUICK TOPICS" 
+                    Foreground="#8B949E"
+                    FontFamily="Consolas" 
+                    FontSize="9" 
+                    Margin="0,0,0,6"/>
+
+                                    <!-- Quick topic buttons will be added here dynamically -->
+                                    <StackPanel x:Name="QuickTopicPanel" Margin="0,0,0,8"/>
+
+                                </StackPanel>
+                            </ScrollViewer>
+                            <!--Bottom buttons-->
+                            <StackPanel 
+                                Grid.Row="1" 
+                                Margin="10,10,10,14">
+
+                                <Rectangle 
+                                    Height="1" 
+                                    Fill="#30363D" 
+                                    Margin="0,0,0,10"/>
+
+                                <Button Content=" Clear Chat"
+                                        Click="clear_chat"
+                                        Margin="0,0,0,4"/>
+
+                                <Button 
+                            Content="  Memory Recap"
+                            Click="memory_recap"
+                            Margin="0,0,0,4"/>
+                                <Button 
+                            Content="  Voice Toggle"
+                             Click="voice_toggle"
+                            Margin="0,0,0,4"/>
+                                <Button 
+                            Content="  Exit"
+                            Click="close_button"/>
+
+                            </StackPanel>
+                        </Grid>
+
+                    </Border>
+
+
+                    <Grid
+                        x:Name="banner_grid"
+                        Grid.Column="1"               
+                        >
+
+                        <!--start of banner grid-->
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <!--head banner-->
+                            <RowDefinition Height="*"/>
+                            <!--messages-->
+                            <RowDefinition Height="Auto"/>
+                            <!--input bar-->
+
+                        </Grid.RowDefinitions>
+
+                        <!--header with ascii logo-->
+
+                        <Border
+                    Grid.Row="0"
+                    Background="#0A0F14"
+                    BorderBrush="#30363D"
+                    BorderThickness="0,0,0,0"
+                    Padding="10,8,10,8"
+                            Margin="0,0,0,5"
+                    >
+                            <!--start of full ascii logo order-->
+                            <Grid>
+                                <!--start of full ascii logo grid-->
+                                <TextBlock
+                            FontFamily="Consolas"
+                            FontWeight="Bold"
+                            FontSize="7"
+                            HorizontalAlignment="Center"
+                            TextAlignment="Center"
+                            xml:space="preserve"
+                            >
+
+                                    <TextBlock.Effect>
+                                        <DropShadowEffect 
+                                Color="#00E5FF"  
+                                BlurRadius="1" 
+                                ShadowDepth="0" 
+                                Opacity="13"
+                                />
+                                    </TextBlock.Effect> 
+                            
+ /$$$$$$  /$$     /$$ /$$$$$$$  /$$$$$$$$ /$$$$$$$   /$$$$$$  /$$$$$$$$  /$$$$$$  /$$   /$$ /$$$$$$$  /$$$$$$ /$$$$$$$$ /$$     /$$
+/$$__  $$|  $$   /$$/| $$__  $$| $$_____/| $$__  $$ /$$__  $$| $$_____/ /$$__  $$| $$  | $$| $$__  $$|_  $$_/|__  $$__/|  $$   /$$/
+| $$  \__/ \  $$ /$$/ | $$  \ $$| $$      | $$  \ $$| $$  \__/| $$      | $$  \__/| $$  | $$| $$  \ $$  | $$     | $$    \  $$ /$$/
+| $$        \  $$$$/  | $$$$$$$ | $$$$$   | $$$$$$$/|  $$$$$$ | $$$$$   | $$      | $$  | $$| $$$$$$$/  | $$     | $$     \  $$$$/
+| $$         \  $$/   | $$__  $$| $$__/   | $$__  $$ \____  $$| $$__/   | $$      | $$  | $$| $$__  $$  | $$     | $$      \  $$/
+| $$    $$    | $$    | $$  \ $$| $$      | $$  \ $$ /$$  \ $$| $$      | $$    $$| $$  | $$| $$  \ $$  | $$     | $$       | $$
+|  $$$$$$/    | $$    | $$$$$$$/| $$$$$$$$| $$  | $$|  $$$$$$/| $$$$$$$$|  $$$$$$/|  $$$$$$/| $$  | $$ /$$$$$$   | $$       | $$
+ \______/     |__/    |_______/ |________/|__/  |__/ \______/ |________/ \______/  \______/ |__/  |__/|______/   |__/       |__/
+
+/$$$$$$  /$$      /$$  /$$$$$$  /$$$$$$$  /$$$$$$$$ /$$   /$$ /$$$$$$$$  /$$$$$$   /$$$$$$        /$$$$$$$   /$$$$$$  /$$$$$$$$ 
+/$$__  $$| $$  /$ | $$ /$$__  $$| $$__  $$| $$_____/| $$$ | $$| $$_____/ /$$__  $$ /$$__  $$      | $$__  $$ /$$__  $$|__  $$__/
+| $$  \ $$| $$ /$$$| $$| $$  \ $$| $$  \ $$| $$      | $$$$| $$| $$      | $$  \__/| $$  \__/      | $$  \ $$| $$  \ $$   | $$   
+| $$$$$$$$| $$/$$ $$ $$| $$$$$$$$| $$$$$$$/| $$$$$   | $$ $$ $$| $$$$$   |  $$$$$$ |  $$$$$$       | $$$$$$$ | $$  | $$   | $$   
+| $$__  $$| $$$$_  $$$$| $$__  $$| $$__  $$| $$__/   | $$  $$$$| $$__/    \____  $$ \____  $$      | $$__  $$| $$  | $$   | $$   
+| $$  | $$| $$$/ \  $$$| $$  | $$| $$  \ $$| $$      | $$\  $$$| $$       /$$  \ $$ /$$  \ $$      | $$  \ $$| $$  | $$   | $$   
+| $$  | $$| $$/   \  $$| $$  | $$| $$  | $$| $$$$$$$$| $$ \  $$| $$$$$$$$|  $$$$$$/|  $$$$$$/      | $$$$$$$/|  $$$$$$/   | $$   
+|__/  |__/|__/     \__/|__/  |__/|__/  |__/|________/|__/  \__/|________/ \______/  \______/       |_______/  \______/    |__/  
+                        
+                            HAPPYCODER BOT  v2.0 
+                        ASK ANYTHING ABOUT CYBERSECURITY
+
+
+                                </TextBlock>
+
+
+                            </Grid>
+                            <!--end of full asci logo grid-->
+
+                        </Border>
+                        <!--end of full asci logo banner-->
+
+
+
+
+                        <Grid
+                    x:Name="chat_grid"
+                    Visibility="Visible"
+                            Grid.Row="1"
+                            Grid.RowSpan="2"
+                    >
+                            <!--start of chat grid-->
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+
+                            </Grid.RowDefinitions>
+
+                            <ScrollViewer
+                        Grid.Row="0"
+                        x:Name="chats_scroll"
+                        Margin="10,10,10,10"
+                        VerticalScrollBarVisibility="Auto"              
+                        >
+
+                                <TextBox
+                                    x:Name="chats_box"
+                                    
+                                    Background="#8B949E"
+                                    Foreground="#E0E0E0"
+                                    BorderThickness="1.5"
+                                    BorderBrush="Cyan"
+                                    FontSize="14"
+                                    VerticalScrollBarVisibility="Auto"
+                                    TextWrapping="Wrap"
+                                    IsReadOnly="True"
+                                    AcceptsReturn="True"
+                                    />
+
+
+                            </ScrollViewer>
+                            <!--left, top, right, bottom-->
+
+                            <!--input row: textbox + send button-->
+
+                            <StackPanel
+                                   
+                                Orientation="Horizontal"
+                                Grid.Row="1"
+                                Margin="10,10,10,15"
+                                >
+
+                                <TextBox           
+                                    x:Name="question_box"
+                                    Height="50"
+                                    
+                                    Margin="0,0,10,0"
+                                    Background="White"
+                                    BorderBrush="#39FF14"
+                                    BorderThickness="1.5"
+                                    FontSize="14"
+                                    VerticalAlignment="Center"
+                                    Padding="10,0,10,0"
+                                    TextWrapping="Wrap"
+                                    AcceptsReturn="True"
+                                    Width="400"
+                                    KeyDown="question_box_KeyDown"
+                                    />
+
+
+
+                                <Button
+                                    x:Name="send_button"
+                                    Height="50"
+                                    Width="100"
+                                    Background="#00E5FF"
+                                    FontWeight="Bold"
+                                    FontSize="14"
+                                    Content="SEND"
+                                    Click="send_question"
+                         />
+
+                            </StackPanel>
+                        </Grid>
+                        <!--end of banner grid-->
+                    </Grid>
+
+                </Grid>
+                <!--end of chat grid-->
+
+
+            </Grid>
+            <!--end of title_bar grid-->
+
+        </Border>
+        <!--end of message window border-->
+
+
+
+    </Grid><!--end of parent grid-->
+</Window>
