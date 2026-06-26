@@ -78,40 +78,51 @@ Database Integration:Yes (SQL)
 Task Reminders: Yes
 
 ## How Each Component Works
-1. QuizGame.cs - Interactive Quiz System
+### 1. QuizGame.cs - Interactive Quiz System
 Purpose: Tests users' cybersecurity knowledge through an interactive quiz.
 
 How It Works:
 
 text
 User: "start quiz"
-         │
-         ▼
-┌─────────────────────────────────────────┐
-│  1. Initialize Questions (15 questions) │
-│     - Multiple Choice                   │
-│     - True/False                        │
-│                                         │
-│  2. Shuffle Questions Randomly          │
-│                                         │
-│  3. Display First Question              │
-│     "Question 1 of 15: What is...?"    │
-│                                         │
-│  4. User Answers (type 1, 2, 3, or 4)  │
-│         │                               │
-│         ▼                               │
-│  5. Check Answer                        │
-│     - If Correct: Score++               │
-│     - Show Feedback                     │
-│                                         │
-│  6. Next Question (repeat until done)   │
-│                                         │
-│  7. Show Final Score                    │
-│     "8/15 - 53% - Keep Learning!"      │
-└─────────────────────────────────────────┘
+
+1. Initialize Questions (15 questions)
+   - Multiple Choice                   -
+   - True/False                                                                 
+2. Shuffle Questions Randomly          
+                                         
+3. Display First Question             
+   - "Question 1 of 15: What is...?"    
+   
+4. User Answers (type 1, 2, 3, or 4)  
+                                                         
+5. Check Answer                       
+    - If Correct: Score++              
+    - Show Feedback                    
+                                        
+6. Next Question (repeat until done)  
+                                       
+7. Show Final Score
+    - "8/15 - 53% - Keep Learning!"
+
 Key Methods:
 
 csharp
-startQuiz()         // Begins the quiz
-processAnswer()     // Checks answer and updates score
-GetSummary()        // Returns final score with feedback
+startQuiz()         
+processAnswer()     
+GetSummary()        
+
+### 2. NLPSimulator.cs - Natural Language Processing
+Purpose: Understands user intent even when phrased differently.
+
+How It Works:
+
+text
+User Input: "Remind me to update my password tomorrow"
+detectIntention(message)                
+
+1. Convert to lowercase
+2. Check against intentPatterns Dictionary                        
+3. Find matching keywords:                         
+   "remind me" → "set_reminder"                  
+4. Retrn intent: "set_reminder" 
